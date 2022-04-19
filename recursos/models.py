@@ -15,7 +15,7 @@ class Recurso(models.Model):
             data_atual = datetime.now() 
             return self.filter(Q(data_alocacao__lt = data_atual) | Q(data_desalocacao__gt = data_atual))  
 
-    user = models.ForeignKey(User, on_delete= models.CASCADE) 
+    user = models.ForeignKey(User, on_delete= models.SET_NULL, null=True) 
     nome = models.CharField(max_length= 200) 
     data_alocacao = models.DateField(null = True) 
     data_desalocacao = models.DateField(null = True) 

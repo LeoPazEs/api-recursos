@@ -1,22 +1,21 @@
 from core.my_views import DynamicSerializerListAPIView, DynamicSerializerUpdateAPIView
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView 
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView , UpdateAPIView
 from rest_framework.permissions import IsAdminUser
 
 from .models import Recurso 
-from .serializers import RecursoSerializer
+from .serializers import RecursoSerializer, AlocarRecursoSetializer
 
 #Users
 # api/recursos/listar-recursos
 class RecursosUserListarView(DynamicSerializerListAPIView): 
     queryset = Recurso.objects.recursos_disponiveis() 
     serializer_class = RecursoSerializer 
-    fields = ("nome",)   
+    fields = ("id", "nome",)   
 
 # api/recursos/alocar-recurso/<int:pk>
-class RecursosUserEditar(DynamicSerializerUpdateAPIView): 
-    serializer_class = RecursoSerializer  
+class RecursosUserEditar(UpdateAPIView): 
+    serializer_class =  AlocarRecursoSetializer 
     queryset = Recurso.objects.recursos_disponiveis()
-    fields = ("data_alocacao","data_desalocacao")
  
 # STAFF
 # api/recursos/listar-criar-recursos/

@@ -1,15 +1,22 @@
 from core.my_serializers import DynamicFieldsModelSerializer
 from .models import Recurso  
-from rest_framework import serializers
+from rest_framework import serializers  
+
+from datetime import datetime
+
 
 class RecursoSerializer(DynamicFieldsModelSerializer): 
-    user = serializers.StringRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    user_alocando = serializers.PrimaryKeyRelatedField(source = "user", read_only= True)
 
     class Meta: 
         model = Recurso 
-        fields = "__all__"  
+        fields = ["id", "nome", "user_alocando", "data_alocacao",  "data_desalocacao"]   
 
-    def save(self, **kwargs):
-        """Include default for read_only `user` field"""
-        kwargs["user"] = self.fields["user"].get_default()
-        return super().save(**kwargs)
+class AlocarRecursoSetializer(serializers.ModelSerializer): 
+    user = serializers.HiddenField( default=serializers.CurrentUserDefault()) 
+    data_alocacao = serializers.HiddenField( default= datetime.now())
+    
+
+    class Meta: 
+        model = Recurso 
+        fields = ["data_alocacao", "data_desalocacao", "user"]   
