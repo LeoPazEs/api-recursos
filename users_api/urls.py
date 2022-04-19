@@ -5,6 +5,6 @@ app_name = "users_api"
 
 urlpatterns = [
     #Staff
-    path("listar-criar-users/", UserStaffListarCriarView.as_view(), name="listar-criar-users"),
-    path("deletar-users/<int:pk>", UserStaffRecuperarDeletarView.as_view(), name="deletar-users")
+    path("staff/listar-criar-users/", UserStaffListarCriarView.as_view(), name="listar-criar-users"),
+    path("staff/deletar-users/<int:pk>", UserStaffRecuperarDeletarView.as_view(), name="deletar-users")
 ]

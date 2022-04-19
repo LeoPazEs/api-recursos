@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from datetime import datetime
 from django.db.models import Q
+from .validators import validatar_data_desalocacao
 
 class Recurso(models.Model): 
 
@@ -18,7 +19,7 @@ class Recurso(models.Model):
     user = models.ForeignKey(User, on_delete= models.SET_NULL, null=True) 
     nome = models.CharField(max_length= 200) 
     data_alocacao = models.DateField(null = True) 
-    data_desalocacao = models.DateField(null = True) 
+    data_desalocacao = models.DateField(null = True, validators=[validatar_data_desalocacao]) 
 
     objects = RecursosManager()
 

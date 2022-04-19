@@ -9,6 +9,6 @@ urlpatterns = [
     path("alocar-recurso/<int:pk>/", RecursosUserEditar.as_view(), name =  "recursos-recuperar-editar-deletar"),
 
     #Staff
-    path("listar-criar-recursos/", RecursosStaffListarCriarView.as_view(), name = "recursos-listar-criar-staff"),
-    path("recuperar-editar-deletar/<int:pk>/", RecursosStaffRecuperarDeletarEditarView.as_view(), name =  "recursos-recuperar-editar-deletar") 
+    path("staff/listar-criar-recursos/", RecursosStaffListarCriarView.as_view(), name = "recursos-listar-criar-staff"),
+    path("staff/recuperar-editar-deletar/<int:pk>/", RecursosStaffRecuperarDeletarEditarView.as_view(), name =  "recursos-recuperar-editar-deletar") 
 ]

@@ -1,4 +1,4 @@
-from core.my_views import DynamicSerializerListAPIView, DynamicSerializerUpdateAPIView
+from core.my_views import DynamicSerializerListAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView , UpdateAPIView
 from rest_framework.permissions import IsAdminUser
 
