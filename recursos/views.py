@@ -3,7 +3,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAdminUser
 
 from .models import Recurso 
-from .serializers import RecursoSerializer, AlocarRecursoSetializer
+from .serializers import RecursoSerializer, AlocarRecursoSerializer
 
 #Users
 # api/recursos/listar-recursos
@@ -14,7 +14,7 @@ class RecursosUserListarView(DynamicSerializerListAPIView):
 
 # api/recursos/alocar-recurso/<int:pk>
 class RecursosUserEditar(UpdateAPIView): 
-    serializer_class =  AlocarRecursoSetializer 
+    serializer_class =  AlocarRecursoSerializer 
     queryset = Recurso.objects.recursos_disponiveis()
  
 # STAFF

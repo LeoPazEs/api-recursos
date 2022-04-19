@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #Libs
     'rest_framework',
+    'drf_spectacular',
 
     # My APPS 
     'users_api',
@@ -138,5 +139,15 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+ 
+#DRF SPECTACUALR SETTINGS 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API Desafio MESHA',
+    'DESCRIPTION': 'API para gerenciar recursos',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }

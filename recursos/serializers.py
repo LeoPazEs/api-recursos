@@ -12,7 +12,7 @@ class RecursoSerializer(DynamicFieldsModelSerializer):
         model = Recurso 
         fields = ["id", "nome", "user_alocando", "data_alocacao",  "data_desalocacao"]   
 
-class AlocarRecursoSetializer(serializers.ModelSerializer): 
+class AlocarRecursoSerializer(serializers.ModelSerializer): 
     user = serializers.HiddenField( default=serializers.CurrentUserDefault()) 
     data_alocacao = serializers.HiddenField( default= datetime.now())
     
