@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # My APPS 
+    'users_api',
     'recursos',
 ]
 

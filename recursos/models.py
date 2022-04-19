@@ -9,7 +9,7 @@ class Recurso(models.Model):
     class RecursosManager(models.Manager):  
         def recursos_disponiveis(self):
             data_atual = datetime.now()
-            return self.filter(Q(data_alocacao__gt = data_atual) | Q(data_desalocacao__lt = data_atual)) 
+            return self.filter(Q(data_alocacao__gt = data_atual) | Q(data_desalocacao__lt = data_atual) | Q(data_alocacao = None) & Q(data_desalocacao = None))
 
         def recursos_indisponiveis(self): 
             data_atual = datetime.now() 
