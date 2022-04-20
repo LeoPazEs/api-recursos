@@ -11,14 +11,14 @@ from rest_framework import status
 #Users
 # api/recursos/listar-recursos
 class RecursosUserListarView(DynamicSerializerListAPIView): 
-    queryset = Recurso.objects.recursos_disponiveis() 
+    queryset = Recurso.objects.disponiveis() 
     serializer_class = RecursoSerializer 
     fields = ("id", "nome", "alocacoes")   
 
 # api/recursos/alocar-recurso/<int:pk>
 class AlocarUser(CreateAPIView): 
     serializer_class =  AlocacaoSerializer
-    queryset = Recurso.objects.recursos_disponiveis() 
+    queryset = Recurso.objects.disponiveis() 
 
     def perform_create(self, serializer):
         recurso = Recurso.objects.get(pk = self.kwargs["pk"])

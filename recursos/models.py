@@ -13,7 +13,7 @@ STATUS_CHOICES = [
 class Recurso(models.Model): 
 
     class RecursosManager(models.Manager):  
-        def recursos_disponiveis(self):
+        def disponiveis(self):
             return self.filter(Q(status = "D"))  
  
     nome = models.CharField(max_length= 200) 
