@@ -20,9 +20,10 @@ class AlocarUser(CreateAPIView):
     serializer_class =  AlocacaoSerializer
     queryset = Recurso.objects.disponiveis() 
 
-    def perform_create(self, serializer):
-        recurso = Recurso.objects.get(pk = self.kwargs["pk"])
-        serializer.save(recurso = recurso)
+
+    # def perform_create(self, serializer):
+    #     recurso = Recurso.objects.get(pk = self.kwargs["pk"])
+    #     serializer.save(recurso = recurso)
 
 # STAFF
 # api/recursos/listar-criar-recursos/
