@@ -1,22 +1,23 @@
 from core.my_serializers import DynamicFieldsModelSerializer
-from .models import Recurso  
+from .models import Recurso , Alocacao
 from rest_framework import serializers  
 
 from datetime import datetime
 
 
 class RecursoSerializer(DynamicFieldsModelSerializer): 
-    user_alocando = serializers.PrimaryKeyRelatedField(source = "user", read_only= True)
+    alocacoes = serializers.PrimaryKeyRelatedField(many = True, read_only= True)
 
     class Meta: 
         model = Recurso 
-        fields = ["id", "nome", "user_alocando", "data_alocacao",  "data_desalocacao"]   
+        fields = ["id", "nome", "alocacoes"]   
 
-class AlocarRecursoSerializer(serializers.ModelSerializer): 
-    user = serializers.HiddenField( default=serializers.CurrentUserDefault()) 
-    data_alocacao = serializers.HiddenField( default= datetime.now())
+class AlocacaoSerializer(serializers.ModelSerializer): 
+    alocador = serializers.HiddenField(default = serializers.CurrentUserDefault())  
+    recurso = serializers.PrimaryKeyRelatedField(read_only= True)
+    
     
 
     class Meta: 
-        model = Recurso 
-        fields = ["data_alocacao", "data_desalocacao", "user"]   
+        model = Alocacao 
+        fields = ["data_alocacao", "data_devolucao", "alocador", "recurso"]   

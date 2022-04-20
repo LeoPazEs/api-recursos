@@ -1,25 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from datetime import datetime
 from django.db.models import Q
-from .validators import validatar_data_desalocacao
+from .validators import validatar_data_devolucao
+
+STATUS_CHOICES = [
+    ("D", "Disponível"), 
+    ("I", "Indisponível"),
+    ("A", "Alocado"),
+]
 
 class Recurso(models.Model): 
 
     class RecursosManager(models.Manager):  
         def recursos_disponiveis(self):
-            data_atual = datetime.now()
-            return self.filter(Q(data_alocacao__gt = data_atual) | Q(data_desalocacao__lt = data_atual) | Q(data_alocacao = None) & Q(data_desalocacao = None))
-
-        def recursos_indisponiveis(self): 
-            data_atual = datetime.now() 
-            return self.filter(Q(data_alocacao__lt = data_atual) | Q(data_desalocacao__gt = data_atual))  
-
-    user = models.ForeignKey(User, on_delete= models.SET_NULL, null=True) 
+            return self.filter(Q(status = "D"))  
+ 
     nome = models.CharField(max_length= 200) 
-    data_alocacao = models.DateField(null = True) 
-    data_desalocacao = models.DateField(null = True, validators=[validatar_data_desalocacao]) 
+    status = models.CharField(max_length= 1,choices = STATUS_CHOICES)
 
     objects = RecursosManager()
 
@@ -27,4 +25,10 @@ class Recurso(models.Model):
         return self.nome 
 
     class Meta: 
-        ordering = ['-id']
+        ordering = ['-id'] 
+    
+class Alocacao(models.Model): 
+    alocador = models.ForeignKey(User, on_delete= models.ProtectedError) 
+    data_alocacao = models.DateField() 
+    data_devolucao = models.DateField(validators=[validatar_data_devolucao])  
+    recurso = models.ForeignKey(Recurso, on_delete= models.ProtectedError, related_name="alocacoes")
