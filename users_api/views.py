@@ -8,6 +8,8 @@ from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, C
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from rest_framework import serializers
+from drf_spectacular.utils import extend_schema, inline_serializer, extend_schema_view, OpenApiResponse
 #  api/users/criar-user/
 class UserCriarView(CreateAPIView): 
     permission_classes = [AllowAny]
@@ -28,6 +30,13 @@ class UserStaffRecuperarDeletarView(RetrieveDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer 
 
+@extend_schema_view(post =  extend_schema( 
+        request= inline_serializer(name = "refresh_token", fields= {"refresh_token" : serializers.CharField()}),
+        responses= {
+            200: OpenApiResponse(description='No response body.'),
+            400: OpenApiResponse(description='Refresh token não fornecido.')
+        }
+    ))
 # api/users/logout/
 class BlackListTokenView(APIView): 
     permission_classes = [AllowAny] 
