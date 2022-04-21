@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from django.db.models import Q
 from .validators import validatar_data_futuro
+
 STATUS_CHOICES = [
     ("D", "Disponível"), 
     ("I", "Indisponível"),
@@ -26,7 +27,7 @@ class Recurso(models.Model):
         ordering = ['-id'] 
     
 class Alocacao(models.Model): 
-    alocador = models.ForeignKey(User, on_delete= models.ProtectedError) 
+    alocador = models.ForeignKey(User, on_delete= models.PROTECT) 
     data_alocacao = models.DateField(validators=[validatar_data_futuro]) 
     data_devolucao = models.DateField(validators=[validatar_data_futuro])  
-    recurso = models.ForeignKey(Recurso, on_delete= models.ProtectedError, related_name="alocacoes")
+    recurso = models.ForeignKey(Recurso, on_delete= models.PROTECT, related_name="alocacoes")

@@ -3,9 +3,10 @@ from .models import Recurso , Alocacao
 from rest_framework import serializers  
 from django.utils import timezone
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 def validar_periodo_alocacao(pk, data_alocacao, data_devolucao): 
-    recurso = Recurso.objects.get(pk = pk) 
+    recurso = get_object_or_404(Recurso, pk = pk)       
     if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gt = timezone.localtime(timezone.now()).date()) & (Q(data_devolucao__gte =  data_alocacao) & Q(data_alocacao__lte = data_devolucao))).exists():
         raise serializers.ValidationError("Periodo de alocação conflita com outro período") 
     return recurso
@@ -17,8 +18,7 @@ class AlocacaoSerializer(DynamicFieldsModelSerializer):
     def validate(self, data):
         data_alocacao = data["data_alocacao"] 
         data_devolucao = data["data_devolucao"] 
-        if data_alocacao > data_devolucao: 
-            raise serializers.ValidationError("Data de devolução antes da data de alocacao.") 
+        if data_alocacao > data_devolucao: raise serializers.ValidationError("Data de devolução antes da data de alocacao.") 
         data["recurso"] = validar_periodo_alocacao(self.context['view'].kwargs['pk'], data_alocacao, data_devolucao)
         return data
 
@@ -28,8 +28,8 @@ class AlocacaoSerializer(DynamicFieldsModelSerializer):
   
 
 class RecursoSerializer(DynamicFieldsModelSerializer): 
-    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso"), many = True, read_only = True)
+    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso"), many = True, read_only = True) 
 
     class Meta: 
         model = Recurso 
-        fields = ["id", "nome", "alocacoes", "status"]   
+        fields = ["id", "nome", "status", "alocacoes"]   
