@@ -3,6 +3,7 @@ from .models import Recurso , Alocacao
 from rest_framework import serializers  
 from django.utils import timezone
 from django.db.models import Q
+
 def validar_periodo_alocacao(recurso, data_alocacao, data_devolucao): 
     if recurso.data_maxima_alocacao < data_alocacao: raise serializers.ValidationError({"data_alocacao" :"Data de alocação depois da data máxima."}) 
     if recurso.periodo_maximo_alocacao and recurso.periodo_maximo_alocacao < (data_devolucao - data_alocacao).days :  raise serializers.ValidationError("Período de alocação maior que período máximo.")
@@ -31,7 +32,14 @@ class AlocacaoSerializer(DynamicFieldsModelSerializer):
         fields = ["id","data_alocacao", "data_devolucao", "alocador", "recurso"]  
   
 
-class RecursoSerializer(DynamicFieldsModelSerializer): 
+class RecursoSerializerUser(DynamicFieldsModelSerializer): 
+    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso", "id"), many = True, read_only = True) 
+
+    class Meta: 
+        model = Recurso 
+        fields = ["id", "nome", "status", "alocacoes", "data_maxima_alocacao", "periodo_maximo_alocacao"]    
+
+class  RecursoSerializerStaff(serializers.ModelSerializer): 
     alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso", "id"), many = True, read_only = True) 
 
     class Meta: 

@@ -1,7 +1,14 @@
 from .serializers import UserSerializer
 from django.contrib.auth.models import User
-from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, CreateAPIView
+from rest_framework.permissions import IsAdminUser, AllowAny
+
+#  api/users/criar-user/
+class UserCriarView(CreateAPIView): 
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer 
+
 
 #Staff
 # api/users/staff/listar-criar-users/

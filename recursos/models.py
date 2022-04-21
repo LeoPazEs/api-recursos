@@ -33,3 +33,6 @@ class Alocacao(models.Model):
     data_alocacao = models.DateField(validators=[validatar_data_futuro]) 
     data_devolucao = models.DateField(validators=[validatar_data_futuro])  
     recurso = models.ForeignKey(Recurso, on_delete= models.PROTECT, related_name="alocacoes")
+
+    class Meta: 
+        ordering = ['-id'] 
