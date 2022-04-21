@@ -21,7 +21,7 @@ class RecursosUserListarView(DynamicSerializerListAPIView):
 # api/recursos/alocar-recurso/<int:pk>
 class RecursoUserAlocar(CreateAPIView): 
     serializer_class =  AlocacaoSerializer
-    queryset = Recurso.objects.disponiveis() 
+
 
 # STAFF
 # api/recursos/staff/listar-criar-recursos/
@@ -40,7 +40,7 @@ class RecursosStaffRecuperarDeletarEditarView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         try:
             self.perform_destroy(instance) 
-        except ProtectedError as e: return Response(data= {"Recurso protegido" : "Recurso não pode ser deletado porque é protegido, provavelmente existem alocações relacionadas ao recurso."} ,status = status.HTTP_400_BAD_REQUEST)
+        except ProtectedError as e: return Response(data= {"Recurso protegido." : "Recurso não pode ser deletado porque é protegido, provavelmente existem alocações relacionadas ao recurso."} ,status = status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     

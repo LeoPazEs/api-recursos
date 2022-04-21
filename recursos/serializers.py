@@ -3,12 +3,11 @@ from .models import Recurso , Alocacao
 from rest_framework import serializers  
 from django.utils import timezone
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
-
-def validar_periodo_alocacao(pk, data_alocacao, data_devolucao): 
-    recurso = get_object_or_404(Recurso, pk = pk)       
+def validar_periodo_alocacao(recurso, data_alocacao, data_devolucao): 
+    if recurso.data_maxima_alocacao < data_alocacao: raise serializers.ValidationError({"data_alocacao" :"Data de alocação depois da data máxima."}) 
+    if recurso.periodo_maximo_alocacao and recurso.periodo_maximo_alocacao < (data_devolucao - data_alocacao).days :  raise serializers.ValidationError("Período de alocação maior que período máximo.")
     if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gt = timezone.localtime(timezone.now()).date()) & (Q(data_devolucao__gte =  data_alocacao) & Q(data_alocacao__lte = data_devolucao))).exists():
-        raise serializers.ValidationError("Periodo de alocação conflita com outro período") 
+        raise serializers.ValidationError("Período de alocação conflita com outro período.") 
     return recurso
 
 class AlocacaoSerializer(DynamicFieldsModelSerializer): 
@@ -19,17 +18,22 @@ class AlocacaoSerializer(DynamicFieldsModelSerializer):
         data_alocacao = data["data_alocacao"] 
         data_devolucao = data["data_devolucao"] 
         if data_alocacao > data_devolucao: raise serializers.ValidationError("Data de devolução antes da data de alocacao.") 
-        data["recurso"] = validar_periodo_alocacao(self.context['view'].kwargs['pk'], data_alocacao, data_devolucao)
+        try:
+            recurso = Recurso.objects.get(pk = self.context['view'].kwargs['pk'], status = "D", data_maxima_alocacao__gte = timezone.localtime(timezone.now()).date())  
+        except Recurso.DoesNotExist: 
+            raise serializers.ValidationError("Recurso inválido!")
+
+        data["recurso"] = validar_periodo_alocacao(recurso, data_alocacao, data_devolucao)
         return data
 
     class Meta: 
         model = Alocacao 
-        fields = ["data_alocacao", "data_devolucao", "alocador", "recurso"]  
+        fields = ["id","data_alocacao", "data_devolucao", "alocador", "recurso"]  
   
 
 class RecursoSerializer(DynamicFieldsModelSerializer): 
-    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso"), many = True, read_only = True) 
+    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso", "id"), many = True, read_only = True) 
 
     class Meta: 
         model = Recurso 
-        fields = ["id", "nome", "status", "alocacoes"]   
+        fields = ["id", "nome", "status", "alocacoes", "data_maxima_alocacao", "periodo_maximo_alocacao"]   

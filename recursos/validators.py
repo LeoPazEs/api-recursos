@@ -7,6 +7,6 @@ from rest_framework.serializers import ValidationError
 def validatar_data_futuro(data):
     if data < timezone.localtime(timezone.now()).date():
         raise ValidationError(
-            _('Date is invalid.'),
+            _('Invalid date.'),
         ) 
 
