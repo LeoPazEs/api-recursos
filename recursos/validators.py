@@ -5,8 +5,6 @@ from django.utils import timezone
 from rest_framework.serializers import ValidationError
 
 def validatar_data_futuro(data):
-    print(timezone.now()) 
-    print(data)
     if data < timezone.localtime(timezone.now()).date():
         raise ValidationError(
             _('Date is invalid.'),

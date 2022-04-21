@@ -6,7 +6,7 @@ from django.db.models import Q
 
 def validar_periodo_alocacao(pk, data_alocacao, data_devolucao): 
     recurso = Recurso.objects.get(pk = pk) 
-    if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gt = timezone.localtime(timezone.now()).date()) & Q(data_alocacao__lte =  data_alocacao) | Q(data_devolucao__gte = data_devolucao)).exists():
+    if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gt = timezone.localtime(timezone.now()).date()) & (Q(data_devolucao__gte =  data_alocacao) & Q(data_alocacao__lte = data_devolucao))).exists():
         raise serializers.ValidationError("Periodo de alocação conflita com outro período") 
     return recurso
 
@@ -28,7 +28,7 @@ class AlocacaoSerializer(DynamicFieldsModelSerializer):
   
 
 class RecursoSerializer(DynamicFieldsModelSerializer): 
-    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao"), many = True, read_only = True)
+    alocacoes = AlocacaoSerializer( fields = ("data_alocacao", "data_devolucao", "recurso"), many = True, read_only = True)
 
     class Meta: 
         model = Recurso 
