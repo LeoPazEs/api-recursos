@@ -2,12 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.db.models import Q
-from .validators import validatar_data_devolucao
-
+from .validators import validatar_data_futuro
 STATUS_CHOICES = [
     ("D", "Disponível"), 
     ("I", "Indisponível"),
-    ("A", "Alocado"),
 ]
 
 class Recurso(models.Model): 
@@ -17,7 +15,7 @@ class Recurso(models.Model):
             return self.filter(Q(status = "D"))  
  
     nome = models.CharField(max_length= 200) 
-    status = models.CharField(max_length= 1,choices = STATUS_CHOICES)
+    status = models.CharField(max_length= 1,choices = STATUS_CHOICES, default = "D")
 
     objects = RecursosManager()
 
@@ -29,6 +27,6 @@ class Recurso(models.Model):
     
 class Alocacao(models.Model): 
     alocador = models.ForeignKey(User, on_delete= models.ProtectedError) 
-    data_alocacao = models.DateField() 
-    data_devolucao = models.DateField(validators=[validatar_data_devolucao])  
+    data_alocacao = models.DateField(validators=[validatar_data_futuro]) 
+    data_devolucao = models.DateField(validators=[validatar_data_futuro])  
     recurso = models.ForeignKey(Recurso, on_delete= models.ProtectedError, related_name="alocacoes")

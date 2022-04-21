@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('data_alocacao', models.DateField()),
-                ('data_devolucao', models.DateField(validators=[recursos.validators.validatar_data_devolucao])),
+                ('data_devolucao', models.DateField(validators=[recursos.validators.validatar_data_futuro])),
                 ('alocador', models.ForeignKey(on_delete=django.db.models.deletion.ProtectedError, to=settings.AUTH_USER_MODEL)),
                 ('recurso', models.ForeignKey(on_delete=django.db.models.deletion.ProtectedError, to='recursos.recurso')),
             ],

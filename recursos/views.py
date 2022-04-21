@@ -20,19 +20,14 @@ class AlocarUser(CreateAPIView):
     serializer_class =  AlocacaoSerializer
     queryset = Recurso.objects.disponiveis() 
 
-
-    # def perform_create(self, serializer):
-    #     recurso = Recurso.objects.get(pk = self.kwargs["pk"])
-    #     serializer.save(recurso = recurso)
-
 # STAFF
-# api/recursos/listar-criar-recursos/
+# api/recursos/staff/listar-criar-recursos/
 class RecursosStaffListarCriarView(ListCreateAPIView): 
     permission_classes = [IsAdminUser]
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer 
 
-# api/recursos/recuperar-editar-deletar/<int:pk>/
+# api/recursos/staff/recuperar-editar-deletar/<int:pk>/
 class RecursosStaffRecuperarDeletarEditarView(RetrieveUpdateDestroyAPIView): 
     permission_classes = [IsAdminUser]
     serializer_class = RecursoSerializer  
