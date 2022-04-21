@@ -7,7 +7,7 @@ from django.db.models import Q
 def validar_periodo_alocacao(recurso, data_alocacao, data_devolucao): 
     if recurso.data_maxima_alocacao < data_alocacao: raise serializers.ValidationError({"data_alocacao" :"Data de alocação depois da data máxima."}) 
     if recurso.periodo_maximo_alocacao and recurso.periodo_maximo_alocacao < (data_devolucao - data_alocacao).days :  raise serializers.ValidationError("Período de alocação maior que período máximo.")
-    if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gt = timezone.localtime(timezone.now()).date()) & (Q(data_devolucao__gte =  data_alocacao) & Q(data_alocacao__lte = data_devolucao))).exists():
+    if Alocacao.objects.filter(Q(recurso = recurso) & Q(data_devolucao__gte = timezone.localtime(timezone.now()).date()) & (Q(data_devolucao__gte =  data_alocacao) & Q(data_alocacao__lte = data_devolucao))).exists():
         raise serializers.ValidationError("Período de alocação conflita com outro período.") 
     return recurso
 

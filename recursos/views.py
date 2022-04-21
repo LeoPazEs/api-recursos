@@ -18,7 +18,7 @@ from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResp
 class RecursosUserListarView(DynamicSerializerListAPIView): 
     queryset = Recurso.objects.disponiveis() 
     serializer_class = RecursoSerializerUser 
-    fields = ("id", "nome", "alocacoes",)   
+    fields = ("id", "nome", "alocacoes", "data_maxima_alocacao")   
 
 @extend_schema_view(
     post= extend_schema(
