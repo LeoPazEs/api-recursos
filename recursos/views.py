@@ -11,7 +11,8 @@ from rest_framework import status
 from django.db.models import ProtectedError
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiResponse, inline_serializer
+from rest_framework import serializers
 
 #Users
 # api/recursos/listar-recursos
@@ -26,7 +27,10 @@ class RecursosUserListarView(DynamicSerializerListAPIView):
         responses={
             201: OpenApiResponse(response= AlocacaoSerializer,
                                  description='Criou uma nova alocação para o recurso com o id na url.'),
-            400: OpenApiResponse(description='Retorna non_field_errors para recursos inválidos ou períodos inválidos para recurso. Retorna "nome_do_field": "menssagem de erro" caso o erro for de um field específico. '),
+            400: OpenApiResponse(
+                response= inline_serializer(name = "non_field_errors", fields= {"non_field_errors" : serializers.CharField()}),
+                description='Retorna non_field_errors para recursos inválidos ou períodos inválidos para recurso. Retorna "nome_do_field" : "menssagem de erro" caso o erro for de um field específico. ',
+            ),
         },
     )
 )
@@ -39,7 +43,7 @@ class RecursoUserAlocar(CreateAPIView):
 # api/recursos/staff/listar-criar-recursos/
 @extend_schema_view(
     post= extend_schema(
-        summary="Status recebe D ou I de disponível e indisponível respectivamente e o periodo máximo de alocação deve ser em dias.",
+        description="Status recebe D ou I de disponível e indisponível respectivamente e o periodo máximo de alocação deve ser em dias.",
     )
 )
 class RecursosStaffListarCriarView(ListCreateAPIView): 
